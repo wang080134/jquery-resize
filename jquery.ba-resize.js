@@ -191,13 +191,17 @@
       function new_handler( e, w, h ) {
         var elem = $(this),
           data = $.data( this, str_data );
-        
+        w = w !== undefined ? w : elem.width();
+        h = h !== undefined ? h : elem.height();        
         // If called from the polling loop, w and h will be passed in as
         // arguments. If called manually, via .trigger( 'resize' ) or .resize(),
         // those values will need to be computed.
-        data.w = w !== undefined ? w : elem.width();
-        data.h = h !== undefined ? h : elem.height();
-        
+        if (data) {
+            data.w = w;
+            data.h = h;
+        } else {
+            $.data(this, str_data, { w: w, h: h });
+        }
         old_handler.apply( this, arguments );
       };
       
